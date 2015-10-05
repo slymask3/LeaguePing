@@ -1,0 +1,9 @@
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\bin\Debug\LeaguePing.exe.config
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\bin\Debug\LeaguePing.exe
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\bin\Debug\LeaguePing.pdb
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.csprojResolveAssemblyReference.cache
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.LeaguePing.resources
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.Properties.Resources.resources
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.csproj.GenerateResource.Cache
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.exe
+c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.pdb
