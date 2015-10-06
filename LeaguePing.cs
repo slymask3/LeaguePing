@@ -23,7 +23,6 @@ namespace LeaguePing
 
         private void LeaguePing_Load(object sender, EventArgs e)
         {
-            labelPing.Text = "Currently not sending any ping requests.";
             radioButtonNA.Checked = true;
         }
 
@@ -32,6 +31,8 @@ namespace LeaguePing
         private int lowest = 10000;
         private int highest = 0;
         private System.Threading.Timer timer;
+        private String[] pingHistory = { "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms" };
+        private int[] pings = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         private void resetValues()
         {
@@ -39,6 +40,115 @@ namespace LeaguePing
             highest = 0;
             labelLowest.Text = "Lowest Ping in Current Session: 0ms";
             labelHighest.Text = "Highest Ping in Current Session: 0ms";
+            pingHistory[0] = "0ms";
+            pingHistory[1] = "0ms";
+            pingHistory[2] = "0ms";
+            pingHistory[3] = "0ms";
+            pingHistory[4] = "0ms";
+            pingHistory[5] = "0ms";
+            pingHistory[6] = "0ms";
+            pingHistory[7] = "0ms";
+            pingHistory[8] = "0ms";
+            pingHistory[9] = "0ms";
+            pings[0] = 0;
+            pings[1] = 0;
+            pings[2] = 0;
+            pings[3] = 0;
+            pings[4] = 0;
+            pings[5] = 0;
+            pings[6] = 0;
+            pings[7] = 0;
+            pings[8] = 0;
+            pings[9] = 0;
+        }
+
+        private void updatePingHistory(String ping)
+        {
+            pingHistory[0] = pingHistory[1];
+            pingHistory[1] = pingHistory[2];
+            pingHistory[2] = pingHistory[3];
+            pingHistory[3] = pingHistory[4];
+            pingHistory[4] = pingHistory[5];
+            pingHistory[5] = pingHistory[6];
+            pingHistory[6] = pingHistory[7];
+            pingHistory[7] = pingHistory[8];
+            pingHistory[8] = pingHistory[9];
+            pingHistory[9] = ping;
+
+
+            labelPing0.Text = pingHistory[0];
+            labelPing1.Text = pingHistory[1];
+            labelPing2.Text = pingHistory[2];
+            labelPing3.Text = pingHistory[3];
+            labelPing4.Text = pingHistory[4];
+            labelPing5.Text = pingHistory[5];
+            labelPing6.Text = pingHistory[6];
+            labelPing7.Text = pingHistory[7];
+            labelPing8.Text = pingHistory[8];
+            labelPing9.Text = pingHistory[9];
+
+
+            for (int i = 0; i < 10; i++ )
+            {
+                if (pingHistory[i].Contains("Timed Out") || pingHistory[i].Contains("Error"))
+                {
+                    pings[i] = -1;
+                }
+                else
+                {
+                    pings[i] = int.Parse(pingHistory[i].Replace("ms", ""));
+                }
+            }
+
+            labelPing0.ForeColor = getColor(pings[0]);
+            labelPing1.ForeColor = getColor(pings[1]);
+            labelPing2.ForeColor = getColor(pings[2]);
+            labelPing3.ForeColor = getColor(pings[3]);
+            labelPing4.ForeColor = getColor(pings[4]);
+            labelPing5.ForeColor = getColor(pings[5]);
+            labelPing6.ForeColor = getColor(pings[6]);
+            labelPing7.ForeColor = getColor(pings[7]);
+            labelPing8.ForeColor = getColor(pings[8]);
+            labelPing9.ForeColor = getColor(pings[9]);
+        }
+
+        private string getAveragePing()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (pings[i] == -1)
+                {
+                    return "Timed Out"; 
+                }
+
+                if (pings[i] == 0)
+                {
+                    return "Processing";
+                }
+            }
+
+            return ((pings[0] + pings[1] + pings[2] + pings[3] + pings[4] + pings[5] + pings[6] + pings[7] + pings[8] + pings[9]) / 10).ToString()+"ms";
+        }
+
+        private Color getColor(int ping)
+        {
+            if(ping >= 250) {
+                return Color.Red;
+            }
+            else if (ping >= 100)
+            {
+                return Color.Orange;
+            }
+            else if (ping >= 1)
+            {
+                return Color.Green;
+            }
+            else if (ping >= -1)
+            {
+                return Color.Red;
+            }
+
+            return Color.Black;
         }
 
         private void buttonStart_Click(object sender, EventArgs e) {
@@ -77,12 +187,14 @@ namespace LeaguePing
                     if (ping <= 0)
                     {
                         labelPing.ForeColor = Color.Red;
-                        labelPing.Text = ("Pinging " + server + " : Reply = Timed Out");
+                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
+                        updatePingHistory("Timed Out");
                     }
                     else if (ping >= 250)
                     {
                         labelPing.ForeColor = Color.Red;
-                        labelPing.Text = ("Pinging " + server + " : Reply = " + ping.ToString() + "ms");
+                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms");
 
                         if (ping > highest)
                         {
@@ -98,7 +210,8 @@ namespace LeaguePing
                     else if (ping >= 100)
                     {
                         labelPing.ForeColor = Color.Orange;
-                        labelPing.Text = ("Pinging " + server + " : Reply = " + ping.ToString() + "ms");
+                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms");
 
                         if (ping > highest)
                         {
@@ -114,7 +227,8 @@ namespace LeaguePing
                     else if(ping >= 1)
                     {
                         labelPing.ForeColor = Color.Green;
-                        labelPing.Text = ("Pinging " + server + " : Reply = " + ping.ToString() + "ms");
+                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms");
 
                         if (ping > highest)
                         {
@@ -127,20 +241,24 @@ namespace LeaguePing
                             labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
                         }
                     }
-
                 }
                 catch (System.Net.NetworkInformation.PingException ex)
                 {
                     labelPing.ForeColor = Color.Red;
-                    labelPing.Text = ("Pinging " + server + " : Reply = Timed Out");
+                    labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
+                    updatePingHistory("Timed Out");
                 }
                 catch (Exception ex)
                 {
 
                     labelPing.ForeColor = Color.Red;
-                    labelPing.Text = ("Pinging " + server + " : Reply = Error");
+                    labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
+                    updatePingHistory("Error");
 
                 }
+
+                labelAverage.Text = "Average Ping in Current Session: " + getAveragePing();
+
             }));
         }
 
