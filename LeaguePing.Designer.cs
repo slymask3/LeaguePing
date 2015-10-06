@@ -50,8 +50,10 @@
             this.labelPing1 = new System.Windows.Forms.Label();
             this.labelPing0 = new System.Windows.Forms.Label();
             this.buttonReset = new System.Windows.Forms.Button();
+            this.pictureBoxPing = new System.Windows.Forms.PictureBox();
             this.groupBoxServers.SuspendLayout();
             this.groupBoxPingHistory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPing)).BeginInit();
             this.SuspendLayout();
             // 
             // labelPing
@@ -259,6 +261,15 @@
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
+            // pictureBoxPing
+            // 
+            this.pictureBoxPing.Image = global::LeaguePing.Properties.Resources.pingGray;
+            this.pictureBoxPing.Location = new System.Drawing.Point(380, 6);
+            this.pictureBoxPing.Name = "pictureBoxPing";
+            this.pictureBoxPing.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxPing.TabIndex = 12;
+            this.pictureBoxPing.TabStop = false;
+            // 
             // LeaguePing
             // 
             this.AcceptButton = this.buttonStart;
@@ -267,6 +278,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.buttonStop;
             this.ClientSize = new System.Drawing.Size(408, 327);
+            this.Controls.Add(this.pictureBoxPing);
             this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.groupBoxPingHistory);
             this.Controls.Add(this.labelAverage);
@@ -287,6 +299,7 @@
             this.groupBoxServers.PerformLayout();
             this.groupBoxPingHistory.ResumeLayout(false);
             this.groupBoxPingHistory.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -315,6 +328,7 @@
         private System.Windows.Forms.Label labelPing2;
         private System.Windows.Forms.Label labelPing1;
         private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.PictureBox pictureBoxPing;
     }
 }
 

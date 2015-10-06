@@ -71,6 +71,10 @@ namespace LeaguePing
             labelPing7.Text = pingHistory[7];
             labelPing8.Text = pingHistory[8];
             labelPing9.Text = pingHistory[9];
+
+            pictureBoxPing.Image = Properties.Resources.pingGray;
+
+            this.Icon = Properties.Resources.iconGray;
         }
 
         private void updatePingHistory(String ping)
@@ -206,12 +210,16 @@ namespace LeaguePing
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
                         updatePingHistory("Timed Out");
+                        pictureBoxPing.Image = Properties.Resources.pingRed;
+                        this.Icon = Properties.Resources.iconRed;
                     }
                     else if (ping >= 250)
                     {
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
                         updatePingHistory(ping.ToString() + "ms");
+                        pictureBoxPing.Image = Properties.Resources.pingRed;
+                        this.Icon = Properties.Resources.iconRed;
 
                         if (ping > highest)
                         {
@@ -229,6 +237,8 @@ namespace LeaguePing
                         labelPing.ForeColor = Color.Orange;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
                         updatePingHistory(ping.ToString() + "ms");
+                        pictureBoxPing.Image = Properties.Resources.pingOrange;
+                        this.Icon = Properties.Resources.iconOrange;
 
                         if (ping > highest)
                         {
@@ -246,6 +256,8 @@ namespace LeaguePing
                         labelPing.ForeColor = Color.Green;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
                         updatePingHistory(ping.ToString() + "ms");
+                        pictureBoxPing.Image = Properties.Resources.pingGreen;
+                        this.Icon = Properties.Resources.iconGreen;
 
                         if (ping > highest)
                         {
@@ -264,14 +276,16 @@ namespace LeaguePing
                     labelPing.ForeColor = Color.Red;
                     labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
                     updatePingHistory("Timed Out");
+                    pictureBoxPing.Image = Properties.Resources.pingRed;
+                    this.Icon = Properties.Resources.iconRed;
                 }
                 catch (Exception ex)
                 {
-
                     labelPing.ForeColor = Color.Red;
                     labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
                     updatePingHistory("Error");
-
+                    pictureBoxPing.Image = Properties.Resources.pingRed;
+                    this.Icon = Properties.Resources.iconRed;
                 }
 
                 labelAverage.Text = "Average Ping in Current Session: " + getAveragePing();
