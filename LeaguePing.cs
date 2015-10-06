@@ -31,7 +31,7 @@ namespace LeaguePing
         private int lowest = 10000;
         private int highest = 0;
         private System.Threading.Timer timer;
-        private String[] pingHistory = { "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms", "0ms" };
+        private String[] pingHistory = { "", "", "", "", "", "", "", "", "", "" };
         private int[] pings = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         private void resetValues()
@@ -40,16 +40,17 @@ namespace LeaguePing
             highest = 0;
             labelLowest.Text = "Lowest Ping in Current Session: 0ms";
             labelHighest.Text = "Highest Ping in Current Session: 0ms";
-            pingHistory[0] = "0ms";
-            pingHistory[1] = "0ms";
-            pingHistory[2] = "0ms";
-            pingHistory[3] = "0ms";
-            pingHistory[4] = "0ms";
-            pingHistory[5] = "0ms";
-            pingHistory[6] = "0ms";
-            pingHistory[7] = "0ms";
-            pingHistory[8] = "0ms";
-            pingHistory[9] = "0ms";
+            labelAverage.Text = "Average Ping in Current Session: 0ms";
+            pingHistory[0] = "";
+            pingHistory[1] = "";
+            pingHistory[2] = "";
+            pingHistory[3] = "";
+            pingHistory[4] = "";
+            pingHistory[5] = "";
+            pingHistory[6] = "";
+            pingHistory[7] = "";
+            pingHistory[8] = "";
+            pingHistory[9] = "";
             pings[0] = 0;
             pings[1] = 0;
             pings[2] = 0;
@@ -60,6 +61,16 @@ namespace LeaguePing
             pings[7] = 0;
             pings[8] = 0;
             pings[9] = 0;
+            labelPing0.Text = pingHistory[0];
+            labelPing1.Text = pingHistory[1];
+            labelPing2.Text = pingHistory[2];
+            labelPing3.Text = pingHistory[3];
+            labelPing4.Text = pingHistory[4];
+            labelPing5.Text = pingHistory[5];
+            labelPing6.Text = pingHistory[6];
+            labelPing7.Text = pingHistory[7];
+            labelPing8.Text = pingHistory[8];
+            labelPing9.Text = pingHistory[9];
         }
 
         private void updatePingHistory(String ping)
@@ -93,6 +104,10 @@ namespace LeaguePing
                 if (pingHistory[i].Contains("Timed Out") || pingHistory[i].Contains("Error"))
                 {
                     pings[i] = -1;
+                }
+                else if (pingHistory[i].Equals(""))
+                {
+                    pings[i] = 0;
                 }
                 else
                 {
@@ -159,6 +174,7 @@ namespace LeaguePing
             
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
+            buttonReset.Enabled = true;
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -170,6 +186,7 @@ namespace LeaguePing
 
             buttonStop.Enabled = false;
             buttonStart.Enabled = true;
+            buttonReset.Enabled = false;
 
             resetValues();
         }
@@ -266,7 +283,12 @@ namespace LeaguePing
         {
             if(radioButtonNA.Checked) {
                 server = "North America";
-                ip = "104.160.131.1";
+                ip = "104.160.131.1"; //na chicago
+                //ip = "95.172.65.1"; //euw?
+                //ip = "104.16.22.33"; //euw in toronto?
+                //ip = "riot.de"; //euw?
+                //ip = "95.172.65.1"; //euw?
+                //ip = "104.16.22.33";
 
                 resetValues();
             }
@@ -276,11 +298,32 @@ namespace LeaguePing
         {
             if (radioButtonEUW.Checked)
             {
-                server = "Google";
-                ip = "www.google.ca";
+                server = "Europe West";
+                ip = "95.172.65.1"; //euw?
 
                 resetValues();
             }
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            timer.Dispose();
+
+            labelPing.ForeColor = Color.Black;
+            labelPing.Text = "Currently not sending any ping requests.";
+
+            buttonStop.Enabled = false;
+            buttonStart.Enabled = true;
+
+            resetValues();
+
+            timer = new System.Threading.Timer((t) =>
+            {
+                updatePing();
+            }, null, 0, 1000);
+
+            buttonStart.Enabled = false;
+            buttonStop.Enabled = true;
         }
     }
 }
