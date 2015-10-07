@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Timers;
+using System.Diagnostics;
 
 namespace LeaguePing
 {
@@ -32,6 +33,7 @@ namespace LeaguePing
         private int highest = 0;
         private System.Threading.Timer timer;
         private String[] pingHistory = { "", "", "", "", "", "", "", "", "", "" };
+        private String[] timestamp = { "", "", "", "", "", "", "", "", "", "" };
         private int[] pings = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         private void resetValues()
@@ -51,6 +53,16 @@ namespace LeaguePing
             pingHistory[7] = "";
             pingHistory[8] = "";
             pingHistory[9] = "";
+            timestamp[0] = "";
+            timestamp[1] = "";
+            timestamp[2] = "";
+            timestamp[3] = "";
+            timestamp[4] = "";
+            timestamp[5] = "";
+            timestamp[6] = "";
+            timestamp[7] = "";
+            timestamp[8] = "";
+            timestamp[9] = "";
             pings[0] = 0;
             pings[1] = 0;
             pings[2] = 0;
@@ -71,13 +83,23 @@ namespace LeaguePing
             labelPing7.Text = pingHistory[7];
             labelPing8.Text = pingHistory[8];
             labelPing9.Text = pingHistory[9];
+            labelTime0.Text = timestamp[0];
+            labelTime1.Text = timestamp[1];
+            labelTime2.Text = timestamp[2];
+            labelTime3.Text = timestamp[3];
+            labelTime4.Text = timestamp[4];
+            labelTime5.Text = timestamp[5];
+            labelTime6.Text = timestamp[6];
+            labelTime7.Text = timestamp[7];
+            labelTime8.Text = timestamp[8];
+            labelTime9.Text = timestamp[9];
 
             pictureBoxPing.Image = Properties.Resources.pingGray;
 
             this.Icon = Properties.Resources.iconGray;
         }
 
-        private void updatePingHistory(String ping)
+        private void updatePingHistory(String ping, DateTime time)
         {
             pingHistory[0] = pingHistory[1];
             pingHistory[1] = pingHistory[2];
@@ -90,6 +112,16 @@ namespace LeaguePing
             pingHistory[8] = pingHistory[9];
             pingHistory[9] = ping;
 
+            timestamp[0] = timestamp[1];
+            timestamp[1] = timestamp[2];
+            timestamp[2] = timestamp[3];
+            timestamp[3] = timestamp[4];
+            timestamp[4] = timestamp[5];
+            timestamp[5] = timestamp[6];
+            timestamp[6] = timestamp[7];
+            timestamp[7] = timestamp[8];
+            timestamp[8] = timestamp[9];
+            timestamp[9] = "[" + cleanTime(time.Hour) + ":" + cleanTime(time.Minute) + ":" + cleanTime(time.Second) + "]";
 
             labelPing0.Text = pingHistory[0];
             labelPing1.Text = pingHistory[1];
@@ -101,6 +133,17 @@ namespace LeaguePing
             labelPing7.Text = pingHistory[7];
             labelPing8.Text = pingHistory[8];
             labelPing9.Text = pingHistory[9];
+
+            labelTime0.Text = timestamp[0];
+            labelTime1.Text = timestamp[1];
+            labelTime2.Text = timestamp[2];
+            labelTime3.Text = timestamp[3];
+            labelTime4.Text = timestamp[4];
+            labelTime5.Text = timestamp[5];
+            labelTime6.Text = timestamp[6];
+            labelTime7.Text = timestamp[7];
+            labelTime8.Text = timestamp[8];
+            labelTime9.Text = timestamp[9];
 
 
             for (int i = 0; i < 10; i++ )
@@ -115,6 +158,10 @@ namespace LeaguePing
                 }
                 else
                 {
+                    //pingHistory[i] = pingHistory[i].Remove(10);
+                    //string temp = pingHistory[i];
+                    //temp = temp.
+                    //temp = temp.Replace("ms", "");
                     pings[i] = int.Parse(pingHistory[i].Replace("ms", ""));
                 }
             }
@@ -129,6 +176,17 @@ namespace LeaguePing
             labelPing7.ForeColor = getColor(pings[7]);
             labelPing8.ForeColor = getColor(pings[8]);
             labelPing9.ForeColor = getColor(pings[9]);
+        }
+
+        private string cleanTime(int time)
+        {
+            if (time < 10) {
+                return "0" + time.ToString();
+            }
+            else
+            {
+                return time.ToString();
+            }
         }
 
         private string getAveragePing()
@@ -179,6 +237,8 @@ namespace LeaguePing
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
             buttonReset.Enabled = true;
+
+            textBoxCustom.Enabled = false;
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -193,6 +253,8 @@ namespace LeaguePing
             buttonReset.Enabled = false;
 
             resetValues();
+
+            textBoxCustom.Enabled = true;
         }
 
         private void updatePing()
@@ -209,7 +271,7 @@ namespace LeaguePing
                     {
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
-                        updatePingHistory("Timed Out");
+                        updatePingHistory("Timed Out", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingRed;
                         this.Icon = Properties.Resources.iconRed;
                     }
@@ -217,7 +279,7 @@ namespace LeaguePing
                     {
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingRed;
                         this.Icon = Properties.Resources.iconRed;
 
@@ -236,7 +298,7 @@ namespace LeaguePing
                     {
                         labelPing.ForeColor = Color.Orange;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingOrange;
                         this.Icon = Properties.Resources.iconOrange;
 
@@ -255,7 +317,7 @@ namespace LeaguePing
                     {
                         labelPing.ForeColor = Color.Green;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms");
+                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingGreen;
                         this.Icon = Properties.Resources.iconGreen;
 
@@ -275,7 +337,7 @@ namespace LeaguePing
                 {
                     labelPing.ForeColor = Color.Red;
                     labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
-                    updatePingHistory("Timed Out");
+                    updatePingHistory("Timed Out", System.DateTime.Now);
                     pictureBoxPing.Image = Properties.Resources.pingRed;
                     this.Icon = Properties.Resources.iconRed;
                 }
@@ -283,7 +345,7 @@ namespace LeaguePing
                 {
                     labelPing.ForeColor = Color.Red;
                     labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
-                    updatePingHistory("Error");
+                    updatePingHistory("Error", System.DateTime.Now);
                     pictureBoxPing.Image = Properties.Resources.pingRed;
                     this.Icon = Properties.Resources.iconRed;
                 }
@@ -338,6 +400,44 @@ namespace LeaguePing
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
+
+            textBoxCustom.Enabled = false;
+        }
+
+        private void radioButtonCustom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCustom.Checked)
+            {
+                textBoxCustom.Enabled = true;
+                textBoxCustom.Focus();
+                textBoxCustom.SelectAll();
+
+                if (timer != null)
+                {
+                    timer.Dispose();
+                }
+
+                labelPing.ForeColor = Color.Black;
+                labelPing.Text = "Currently not sending any ping requests.";
+
+                buttonStop.Enabled = false;
+                buttonStart.Enabled = true;
+                buttonReset.Enabled = false;
+
+                resetValues();
+
+                server = "Custom";
+                ip = textBoxCustom.Text;
+            }
+            else
+            {
+                textBoxCustom.Enabled = false;
+            }
+        }
+
+        private void textBoxCustom_TextChanged(object sender, EventArgs e)
+        {
+            ip = textBoxCustom.Text;
         }
     }
 }
