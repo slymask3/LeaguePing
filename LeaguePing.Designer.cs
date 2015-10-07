@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LeaguePing));
             this.labelPing = new System.Windows.Forms.Label();
             this.buttonStart = new System.Windows.Forms.Button();
@@ -63,6 +64,8 @@
             this.labelTime7 = new System.Windows.Forms.Label();
             this.labelTime8 = new System.Windows.Forms.Label();
             this.labelTime9 = new System.Windows.Forms.Label();
+            this.radioButtonOCE = new System.Windows.Forms.RadioButton();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxServers.SuspendLayout();
             this.groupBoxPingHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPing)).BeginInit();
@@ -103,6 +106,7 @@
             // 
             // groupBoxServers
             // 
+            this.groupBoxServers.Controls.Add(this.radioButtonOCE);
             this.groupBoxServers.Controls.Add(this.radioButtonCustom);
             this.groupBoxServers.Controls.Add(this.radioButtonEUW);
             this.groupBoxServers.Controls.Add(this.radioButtonNA);
@@ -395,6 +399,23 @@
             this.labelTime9.Size = new System.Drawing.Size(0, 13);
             this.labelTime9.TabIndex = 19;
             // 
+            // radioButtonOCE
+            // 
+            this.radioButtonOCE.AutoSize = true;
+            this.radioButtonOCE.Location = new System.Drawing.Point(7, 68);
+            this.radioButtonOCE.Name = "radioButtonOCE";
+            this.radioButtonOCE.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonOCE.TabIndex = 3;
+            this.radioButtonOCE.TabStop = true;
+            this.radioButtonOCE.Text = "Oceania";
+            this.radioButtonOCE.UseVisualStyleBackColor = true;
+            this.radioButtonOCE.CheckedChanged += new System.EventHandler(this.radioButtonOCE_CheckedChanged);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
             // LeaguePing
             // 
             this.AcceptButton = this.buttonStart;
@@ -467,6 +488,8 @@
         private System.Windows.Forms.Label labelTime3;
         private System.Windows.Forms.Label labelTime2;
         private System.Windows.Forms.Label labelTime1;
+        private System.Windows.Forms.RadioButton radioButtonOCE;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

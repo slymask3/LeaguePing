@@ -42,7 +42,7 @@ namespace LeaguePing
             highest = 0;
             labelLowest.Text = "Lowest Ping in Current Session: 0ms";
             labelHighest.Text = "Highest Ping in Current Session: 0ms";
-            labelAverage.Text = "Average Ping in Current Session: 0ms";
+            labelAverage.Text = "Average Ping from Last 10 Results: 0ms";
             pingHistory[0] = "";
             pingHistory[1] = "";
             pingHistory[2] = "";
@@ -259,15 +259,83 @@ namespace LeaguePing
 
         private void updatePing()
         {
-            this.Invoke(new MethodInvoker(delegate()
-            {      
-                Ping pingClass = new Ping();
-                try
+            try
+            {
+                this.Invoke(new MethodInvoker(delegate()
                 {
-                    PingReply pingReply = pingClass.Send(ip, 1000);
-                    long ping = pingReply.RoundtripTime;
+                    Ping pingClass = new Ping();
+                    try
+                    {
+                        PingReply pingReply = pingClass.Send(ip, 1000);
+                        long ping = pingReply.RoundtripTime;
 
-                    if (ping <= 0)
+                        if (ping <= 0)
+                        {
+                            labelPing.ForeColor = Color.Red;
+                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
+                            updatePingHistory("Timed Out", System.DateTime.Now);
+                            pictureBoxPing.Image = Properties.Resources.pingRed;
+                            this.Icon = Properties.Resources.iconRed;
+                        }
+                        else if (ping >= 250)
+                        {
+                            labelPing.ForeColor = Color.Red;
+                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                            pictureBoxPing.Image = Properties.Resources.pingRed;
+                            this.Icon = Properties.Resources.iconRed;
+
+                            if (ping > highest)
+                            {
+                                highest = (int)ping;
+                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                            }
+                            if (ping < lowest)
+                            {
+                                lowest = (int)ping;
+                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                            }
+                        }
+                        else if (ping >= 100)
+                        {
+                            labelPing.ForeColor = Color.Orange;
+                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                            pictureBoxPing.Image = Properties.Resources.pingOrange;
+                            this.Icon = Properties.Resources.iconOrange;
+
+                            if (ping > highest)
+                            {
+                                highest = (int)ping;
+                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                            }
+                            if (ping < lowest)
+                            {
+                                lowest = (int)ping;
+                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                            }
+                        }
+                        else if (ping >= 1)
+                        {
+                            labelPing.ForeColor = Color.Green;
+                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                            pictureBoxPing.Image = Properties.Resources.pingGreen;
+                            this.Icon = Properties.Resources.iconGreen;
+
+                            if (ping > highest)
+                            {
+                                highest = (int)ping;
+                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                            }
+                            if (ping < lowest)
+                            {
+                                lowest = (int)ping;
+                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                            }
+                        }
+                    }
+                    catch (System.Net.NetworkInformation.PingException ex)
                     {
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
@@ -275,99 +343,44 @@ namespace LeaguePing
                         pictureBoxPing.Image = Properties.Resources.pingRed;
                         this.Icon = Properties.Resources.iconRed;
                     }
-                    else if (ping >= 250)
+                    catch (Exception ex)
                     {
                         labelPing.ForeColor = Color.Red;
-                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
+                        updatePingHistory("Error", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingRed;
                         this.Icon = Properties.Resources.iconRed;
-
-                        if (ping > highest)
-                        {
-                            highest = (int)ping;
-                            labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                        }
-                        if (ping < lowest)
-                        {
-                            lowest = (int)ping;
-                            labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                        }
                     }
-                    else if (ping >= 100)
-                    {
-                        labelPing.ForeColor = Color.Orange;
-                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
-                        pictureBoxPing.Image = Properties.Resources.pingOrange;
-                        this.Icon = Properties.Resources.iconOrange;
 
-                        if (ping > highest)
-                        {
-                            highest = (int)ping;
-                            labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                        }
-                        if (ping < lowest)
-                        {
-                            lowest = (int)ping;
-                            labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                        }
-                    }
-                    else if(ping >= 1)
-                    {
-                        labelPing.ForeColor = Color.Green;
-                        labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                        updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
-                        pictureBoxPing.Image = Properties.Resources.pingGreen;
-                        this.Icon = Properties.Resources.iconGreen;
+                    labelAverage.Text = "Average Ping in Current Session: " + getAveragePing();
 
-                        if (ping > highest)
-                        {
-                            highest = (int)ping;
-                            labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                        }
-                        if (ping < lowest)
-                        {
-                            lowest = (int)ping;
-                            labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                        }
-                    }
-                }
-                catch (System.Net.NetworkInformation.PingException ex)
-                {
-                    labelPing.ForeColor = Color.Red;
-                    labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
-                    updatePingHistory("Timed Out", System.DateTime.Now);
-                    pictureBoxPing.Image = Properties.Resources.pingRed;
-                    this.Icon = Properties.Resources.iconRed;
-                }
-                catch (Exception ex)
-                {
-                    labelPing.ForeColor = Color.Red;
-                    labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
-                    updatePingHistory("Error", System.DateTime.Now);
-                    pictureBoxPing.Image = Properties.Resources.pingRed;
-                    this.Icon = Properties.Resources.iconRed;
-                }
+                }));
+            }
+            catch (System.ObjectDisposedException ex)
+            {
 
-                labelAverage.Text = "Average Ping in Current Session: " + getAveragePing();
-
-            }));
+            }
         }
 
         private void radioButtonNA_CheckedChanged(object sender, EventArgs e)
         {
             if(radioButtonNA.Checked) {
                 server = "North America";
-                ip = "104.160.131.1"; //na chicago
-                //ip = "95.172.65.1"; //euw?
-                //ip = "104.16.22.33"; //euw in toronto?
-                //ip = "riot.de"; //euw?
-                //ip = "95.172.65.1"; //euw?
-                //ip = "104.16.22.33";
+                ip = "104.160.131.1"; //na chicago //104.160.131.1
+                //ip = "95.172.65.1"; //euw? //mx1.eu.lol.riotgames.com
+                //ip = "104.16.22.33"; //euw in toronto? //cloudflare usa, cali
+                //ip = "riot.de"; //euw? //188.40.93.11 //hetzner online //static.11.93.40.188.clients.your-server.de
+                //ip = "95.172.67.1"; //euw //InterNAP Network Services U.K. Limited //TIMEOUT
+                //ip = "114.31.192.105"; //oce? //ten-1-0-0.bdr03.syd04.nsw.vocus.net.au //Vocus Pty Ltd //TIMEOUT
+                //59.100.95.192 and 59.100.95.145 //oce //TIMEOUT
+                //190.93.246.186 //oce? //CloudFlare Latin America S.R.L
+                //14.200.100.27 //oce? //14-200-100-27.static.tpgi.com.au //i avg 280ms //TPG Internet //oceania, australia
+                //95.172.65.154 and 31.186.224.112 //na? //TIMEOUT
+                //203.174.139.185 //oce? //203-174-139-185.syd.static-ipl.aapt.com.au //AAPT Limited //PowerTel/ i avg 260ms
 
                 resetValues();
             }
+
         }
 
         private void radioButtonEUW_CheckedChanged(object sender, EventArgs e)
@@ -383,7 +396,10 @@ namespace LeaguePing
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
-            timer.Dispose();
+            if (timer != null)
+            {
+                timer.Dispose();
+            }
 
             labelPing.ForeColor = Color.Black;
             labelPing.Text = "Currently not sending any ping requests.";
@@ -438,6 +454,17 @@ namespace LeaguePing
         private void textBoxCustom_TextChanged(object sender, EventArgs e)
         {
             ip = textBoxCustom.Text;
+        }
+
+        private void radioButtonOCE_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonOCE.Checked)
+            {
+                server = "Oceania";
+                ip = "14.200.100.27";
+
+                resetValues();
+            }
         }
     }
 }
