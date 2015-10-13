@@ -12,6 +12,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Timers;
 using System.Diagnostics;
+//using System.Management;
 
 namespace LeaguePing
 {
@@ -35,6 +36,7 @@ namespace LeaguePing
         private String[] pingHistory = { "", "", "", "", "", "", "", "", "", "" };
         private String[] timestamp = { "", "", "", "", "", "", "", "", "", "" };
         private int[] pings = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private int delay = 1000;
 
         private void resetValues()
         {
@@ -97,6 +99,8 @@ namespace LeaguePing
             pictureBoxPing.Image = Properties.Resources.pingGray;
 
             this.Icon = Properties.Resources.iconGray;
+
+            chartPing.Series["Ping"].Points.Clear();
         }
 
         private void updatePingHistory(String ping, DateTime time)
@@ -145,16 +149,21 @@ namespace LeaguePing
             labelTime8.Text = timestamp[8];
             labelTime9.Text = timestamp[9];
 
+            chartPing.Series["Ping"].Points.Clear();
 
             for (int i = 0; i < 10; i++ )
             {
-                if (pingHistory[i].Contains("Timed Out") || pingHistory[i].Contains("Error"))
+                if (pingHistory[i].Contains("Timed Out") || pingHistory[i].Contains("Failed") || pingHistory[i].Contains("Error"))
                 {
                     pings[i] = -1;
+                    chartPing.Series["Ping"].Points.AddXY(i + 1, 299);
+                    chartPing.Series["Ping"].Color = Color.Red;
                 }
                 else if (pingHistory[i].Equals(""))
                 {
                     pings[i] = 0;
+                    chartPing.Series["Ping"].Points.AddXY(i + 1, 1);
+                    chartPing.Series["Ping"].Color = Color.Green;
                 }
                 else
                 {
@@ -163,6 +172,13 @@ namespace LeaguePing
                     //temp = temp.
                     //temp = temp.Replace("ms", "");
                     pings[i] = int.Parse(pingHistory[i].Replace("ms", ""));
+
+                    if(pings[i] >= 300) {
+                        chartPing.Series["Ping"].Points.AddXY(i+1, 299);
+                    } else {
+                        chartPing.Series["Ping"].Points.AddXY(i+1, pings[i]);
+                    }
+                    chartPing.Series["Ping"].Color = getColor(pings[i]);
                 }
             }
 
@@ -232,13 +248,17 @@ namespace LeaguePing
             timer = new System.Threading.Timer((t) =>
             {
                 updatePing();
-            }, null, 0, 1000);
+            }, null, 0, delay);
             
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
             buttonReset.Enabled = true;
 
             textBoxCustom.Enabled = false;
+
+            numericUpDownDelay.Enabled = false;
+
+            delay = (int)(numericUpDownDelay.Value * 1000);
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -255,11 +275,13 @@ namespace LeaguePing
             resetValues();
 
             textBoxCustom.Enabled = true;
+
+            numericUpDownDelay.Enabled = true;
         }
 
         private void updatePing()
         {
-            try
+            try 
             {
                 this.Invoke(new MethodInvoker(delegate()
                 {
@@ -267,72 +289,82 @@ namespace LeaguePing
                     try
                     {
                         PingReply pingReply = pingClass.Send(ip, 1000);
-                        long ping = pingReply.RoundtripTime;
+                        if (pingReply.Status == IPStatus.Success)
+                        {
+                            long ping = pingReply.RoundtripTime;
+                            if (ping <= 0)
+                            {
+                                labelPing.ForeColor = Color.Red;
+                                labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
+                                updatePingHistory("Timed Out", System.DateTime.Now);
+                                pictureBoxPing.Image = Properties.Resources.pingRed;
+                                this.Icon = Properties.Resources.iconRed;
+                            }
+                            else if (ping >= 250)
+                            {
+                                labelPing.ForeColor = Color.Red;
+                                labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                                updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                                pictureBoxPing.Image = Properties.Resources.pingRed;
+                                this.Icon = Properties.Resources.iconRed;
 
-                        if (ping <= 0)
+                                if (ping > highest)
+                                {
+                                    highest = (int)ping;
+                                    labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                                }
+                                if (ping < lowest)
+                                {
+                                    lowest = (int)ping;
+                                    labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                                }
+                            }
+                            else if (ping >= 100)
+                            {
+                                labelPing.ForeColor = Color.Orange;
+                                labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                                updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                                pictureBoxPing.Image = Properties.Resources.pingOrange;
+                                this.Icon = Properties.Resources.iconOrange;
+
+                                if (ping > highest)
+                                {
+                                    highest = (int)ping;
+                                    labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                                }
+                                if (ping < lowest)
+                                {
+                                    lowest = (int)ping;
+                                    labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                                }
+                            }
+                            else if (ping >= 1)
+                            {
+                                labelPing.ForeColor = Color.Green;
+                                labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
+                                updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
+                                pictureBoxPing.Image = Properties.Resources.pingGreen;
+                                this.Icon = Properties.Resources.iconGreen;
+
+                                if (ping > highest)
+                                {
+                                    highest = (int)ping;
+                                    labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
+                                }
+                                if (ping < lowest)
+                                {
+                                    lowest = (int)ping;
+                                    labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
+                                }
+                            }
+                        }
+                        else
                         {
                             labelPing.ForeColor = Color.Red;
-                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Timed Out");
+                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Failed");
                             updatePingHistory("Timed Out", System.DateTime.Now);
                             pictureBoxPing.Image = Properties.Resources.pingRed;
                             this.Icon = Properties.Resources.iconRed;
-                        }
-                        else if (ping >= 250)
-                        {
-                            labelPing.ForeColor = Color.Red;
-                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
-                            pictureBoxPing.Image = Properties.Resources.pingRed;
-                            this.Icon = Properties.Resources.iconRed;
-
-                            if (ping > highest)
-                            {
-                                highest = (int)ping;
-                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                            }
-                            if (ping < lowest)
-                            {
-                                lowest = (int)ping;
-                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                            }
-                        }
-                        else if (ping >= 100)
-                        {
-                            labelPing.ForeColor = Color.Orange;
-                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
-                            pictureBoxPing.Image = Properties.Resources.pingOrange;
-                            this.Icon = Properties.Resources.iconOrange;
-
-                            if (ping > highest)
-                            {
-                                highest = (int)ping;
-                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                            }
-                            if (ping < lowest)
-                            {
-                                lowest = (int)ping;
-                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                            }
-                        }
-                        else if (ping >= 1)
-                        {
-                            labelPing.ForeColor = Color.Green;
-                            labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = " + ping.ToString() + "ms");
-                            updatePingHistory(ping.ToString() + "ms", System.DateTime.Now);
-                            pictureBoxPing.Image = Properties.Resources.pingGreen;
-                            this.Icon = Properties.Resources.iconGreen;
-
-                            if (ping > highest)
-                            {
-                                highest = (int)ping;
-                                labelHighest.Text = "Highest Ping in Current Session: " + highest + "ms";
-                            }
-                            if (ping < lowest)
-                            {
-                                lowest = (int)ping;
-                                labelLowest.Text = "Lowest Ping in Current Session: " + lowest + "ms";
-                            }
                         }
                     }
                     catch (System.Net.NetworkInformation.PingException ex)
@@ -347,13 +379,15 @@ namespace LeaguePing
                     {
                         labelPing.ForeColor = Color.Red;
                         labelPing.Text = ("Pinging " + server + " (" + ip + ") : Reply = Error");
-                        updatePingHistory("Error", System.DateTime.Now);
+                        updatePingHistory("Timed Out", System.DateTime.Now);
                         pictureBoxPing.Image = Properties.Resources.pingRed;
                         this.Icon = Properties.Resources.iconRed;
                     }
 
                     labelAverage.Text = "Average Ping in Current Session: " + getAveragePing();
 
+                    //network check, could be useful
+                    //NetworkInterface.GetIsNetworkAvailable();
                 }));
             }
             catch (System.ObjectDisposedException ex)
@@ -418,6 +452,8 @@ namespace LeaguePing
             buttonStop.Enabled = true;
 
             textBoxCustom.Enabled = false;
+
+            numericUpDownDelay.Enabled = false;
         }
 
         private void radioButtonCustom_CheckedChanged(object sender, EventArgs e)
@@ -439,6 +475,7 @@ namespace LeaguePing
                 buttonStop.Enabled = false;
                 buttonStart.Enabled = true;
                 buttonReset.Enabled = false;
+                numericUpDownDelay.Enabled = true;
 
                 resetValues();
 
@@ -465,6 +502,32 @@ namespace LeaguePing
 
                 resetValues();
             }
+        }
+
+        private void numericUpDownDelay_ValueChanged(object sender, EventArgs e)
+        {
+            delay = (int)(numericUpDownDelay.Value * 1000);
+        }
+
+        private void buttonConnection_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo pInfo = new ProcessStartInfo();
+            pInfo.FileName = @"C:\WINDOWS\System32\ipconfig.exe";
+            pInfo.Arguments = "/release";
+            pInfo.RedirectStandardOutput = true;
+            pInfo.UseShellExecute = false;
+            pInfo.CreateNoWindow = true;
+            Process p = Process.Start(pInfo);
+            p.WaitForExit();
+
+            ProcessStartInfo pInfo2 = new ProcessStartInfo();
+            pInfo2.FileName = @"C:\WINDOWS\System32\ipconfig.exe";
+            pInfo2.Arguments = "/renew";
+            pInfo2.RedirectStandardOutput = true;
+            pInfo2.UseShellExecute = false;
+            pInfo2.CreateNoWindow = true;
+            Process p2 = Process.Start(pInfo2);
+            p2.WaitForExit();
         }
     }
 }

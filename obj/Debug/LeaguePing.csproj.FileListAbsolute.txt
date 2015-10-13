@@ -7,3 +7,7 @@ c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\
 c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.csproj.GenerateResource.Cache
 c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.exe
 c:\users\konstantin\documents\visual studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.pdb
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Debug\LeaguePing.exe.manifest
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Debug\LeaguePing.application
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.exe.manifest
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Debug\LeaguePing.application

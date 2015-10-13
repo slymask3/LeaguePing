@@ -1,0 +1,13 @@
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LeaguePing.csprojResolveAssemblyReference.cache
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LeaguePing.LeaguePing.resources
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LeaguePing.Properties.Resources.resources
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LeaguePing.csproj.GenerateResource.Cache
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Release\LoLPingChecker.exe.config
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Release\LoLPingChecker.exe.manifest
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Release\LoLPingChecker.application
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Release\LoLPingChecker.exe
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\bin\Release\LoLPingChecker.pdb
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LoLPingChecker.exe.manifest
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LoLPingChecker.application
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LoLPingChecker.exe
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\LeaguePing\LeaguePing\obj\Release\LoLPingChecker.pdb

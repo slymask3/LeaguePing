@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LeaguePing));
             this.labelPing = new System.Windows.Forms.Label();
             this.buttonStart = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
             this.groupBoxServers = new System.Windows.Forms.GroupBox();
+            this.buttonConnection = new System.Windows.Forms.Button();
+            this.radioButtonOCE = new System.Windows.Forms.RadioButton();
             this.radioButtonCustom = new System.Windows.Forms.RadioButton();
             this.radioButtonEUW = new System.Windows.Forms.RadioButton();
             this.radioButtonNA = new System.Windows.Forms.RadioButton();
@@ -41,6 +45,15 @@
             this.labelHighest = new System.Windows.Forms.Label();
             this.labelAverage = new System.Windows.Forms.Label();
             this.groupBoxPingHistory = new System.Windows.Forms.GroupBox();
+            this.labelTime9 = new System.Windows.Forms.Label();
+            this.labelTime8 = new System.Windows.Forms.Label();
+            this.labelTime7 = new System.Windows.Forms.Label();
+            this.labelTime6 = new System.Windows.Forms.Label();
+            this.labelTime5 = new System.Windows.Forms.Label();
+            this.labelTime4 = new System.Windows.Forms.Label();
+            this.labelTime3 = new System.Windows.Forms.Label();
+            this.labelTime2 = new System.Windows.Forms.Label();
+            this.labelTime1 = new System.Windows.Forms.Label();
             this.labelTime0 = new System.Windows.Forms.Label();
             this.labelPing9 = new System.Windows.Forms.Label();
             this.labelPing8 = new System.Windows.Forms.Label();
@@ -55,20 +68,14 @@
             this.buttonReset = new System.Windows.Forms.Button();
             this.pictureBoxPing = new System.Windows.Forms.PictureBox();
             this.textBoxCustom = new System.Windows.Forms.TextBox();
-            this.labelTime1 = new System.Windows.Forms.Label();
-            this.labelTime2 = new System.Windows.Forms.Label();
-            this.labelTime3 = new System.Windows.Forms.Label();
-            this.labelTime4 = new System.Windows.Forms.Label();
-            this.labelTime5 = new System.Windows.Forms.Label();
-            this.labelTime6 = new System.Windows.Forms.Label();
-            this.labelTime7 = new System.Windows.Forms.Label();
-            this.labelTime8 = new System.Windows.Forms.Label();
-            this.labelTime9 = new System.Windows.Forms.Label();
-            this.radioButtonOCE = new System.Windows.Forms.RadioButton();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.labelDelay = new System.Windows.Forms.Label();
+            this.numericUpDownDelay = new System.Windows.Forms.NumericUpDown();
+            this.chartPing = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBoxServers.SuspendLayout();
             this.groupBoxPingHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPing)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPing)).BeginInit();
             this.SuspendLayout();
             // 
             // labelPing
@@ -79,7 +86,7 @@
             this.labelPing.Location = new System.Drawing.Point(12, 9);
             this.labelPing.Name = "labelPing";
             this.labelPing.Size = new System.Drawing.Size(235, 13);
-            this.labelPing.TabIndex = 5;
+            this.labelPing.TabIndex = 7;
             this.labelPing.Text = "Currently not sending any ping requests.";
             // 
             // buttonStart
@@ -110,17 +117,39 @@
             this.groupBoxServers.Controls.Add(this.radioButtonCustom);
             this.groupBoxServers.Controls.Add(this.radioButtonEUW);
             this.groupBoxServers.Controls.Add(this.radioButtonNA);
-            this.groupBoxServers.Location = new System.Drawing.Point(240, 43);
+            this.groupBoxServers.Location = new System.Drawing.Point(240, 87);
             this.groupBoxServers.Name = "groupBoxServers";
-            this.groupBoxServers.Size = new System.Drawing.Size(153, 246);
-            this.groupBoxServers.TabIndex = 3;
+            this.groupBoxServers.Size = new System.Drawing.Size(153, 202);
+            this.groupBoxServers.TabIndex = 5;
             this.groupBoxServers.TabStop = false;
             this.groupBoxServers.Text = "Servers";
+            // 
+            // buttonConnection
+            // 
+            this.buttonConnection.Location = new System.Drawing.Point(321, 468);
+            this.buttonConnection.Name = "buttonConnection";
+            this.buttonConnection.Size = new System.Drawing.Size(75, 36);
+            this.buttonConnection.TabIndex = 13;
+            this.buttonConnection.Text = "Restart Connection";
+            this.buttonConnection.UseVisualStyleBackColor = true;
+            this.buttonConnection.Click += new System.EventHandler(this.buttonConnection_Click);
+            // 
+            // radioButtonOCE
+            // 
+            this.radioButtonOCE.AutoSize = true;
+            this.radioButtonOCE.Location = new System.Drawing.Point(7, 68);
+            this.radioButtonOCE.Name = "radioButtonOCE";
+            this.radioButtonOCE.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonOCE.TabIndex = 3;
+            this.radioButtonOCE.TabStop = true;
+            this.radioButtonOCE.Text = "&Oceania";
+            this.radioButtonOCE.UseVisualStyleBackColor = true;
+            this.radioButtonOCE.CheckedChanged += new System.EventHandler(this.radioButtonOCE_CheckedChanged);
             // 
             // radioButtonCustom
             // 
             this.radioButtonCustom.AutoSize = true;
-            this.radioButtonCustom.Location = new System.Drawing.Point(7, 222);
+            this.radioButtonCustom.Location = new System.Drawing.Point(6, 178);
             this.radioButtonCustom.Name = "radioButtonCustom";
             this.radioButtonCustom.Size = new System.Drawing.Size(60, 17);
             this.radioButtonCustom.TabIndex = 2;
@@ -159,7 +188,7 @@
             this.labelLowest.Location = new System.Drawing.Point(12, 87);
             this.labelLowest.Name = "labelLowest";
             this.labelLowest.Size = new System.Drawing.Size(178, 13);
-            this.labelLowest.TabIndex = 6;
+            this.labelLowest.TabIndex = 8;
             this.labelLowest.Text = "Lowest Ping in Current Session: 0ms";
             // 
             // labelHighest
@@ -168,7 +197,7 @@
             this.labelHighest.Location = new System.Drawing.Point(12, 109);
             this.labelHighest.Name = "labelHighest";
             this.labelHighest.Size = new System.Drawing.Size(180, 13);
-            this.labelHighest.TabIndex = 7;
+            this.labelHighest.TabIndex = 9;
             this.labelHighest.Text = "Highest Ping in Current Session: 0ms";
             // 
             // labelAverage
@@ -177,7 +206,7 @@
             this.labelAverage.Location = new System.Drawing.Point(12, 131);
             this.labelAverage.Name = "labelAverage";
             this.labelAverage.Size = new System.Drawing.Size(184, 13);
-            this.labelAverage.TabIndex = 8;
+            this.labelAverage.TabIndex = 10;
             this.labelAverage.Text = "Average Ping in Current Session: 0ms";
             // 
             // groupBoxPingHistory
@@ -205,9 +234,81 @@
             this.groupBoxPingHistory.Location = new System.Drawing.Point(15, 158);
             this.groupBoxPingHistory.Name = "groupBoxPingHistory";
             this.groupBoxPingHistory.Size = new System.Drawing.Size(203, 158);
-            this.groupBoxPingHistory.TabIndex = 9;
+            this.groupBoxPingHistory.TabIndex = 11;
             this.groupBoxPingHistory.TabStop = false;
             this.groupBoxPingHistory.Text = "Ping History";
+            // 
+            // labelTime9
+            // 
+            this.labelTime9.AutoSize = true;
+            this.labelTime9.Location = new System.Drawing.Point(6, 137);
+            this.labelTime9.Name = "labelTime9";
+            this.labelTime9.Size = new System.Drawing.Size(0, 13);
+            this.labelTime9.TabIndex = 19;
+            // 
+            // labelTime8
+            // 
+            this.labelTime8.AutoSize = true;
+            this.labelTime8.Location = new System.Drawing.Point(6, 124);
+            this.labelTime8.Name = "labelTime8";
+            this.labelTime8.Size = new System.Drawing.Size(0, 13);
+            this.labelTime8.TabIndex = 18;
+            // 
+            // labelTime7
+            // 
+            this.labelTime7.AutoSize = true;
+            this.labelTime7.Location = new System.Drawing.Point(6, 111);
+            this.labelTime7.Name = "labelTime7";
+            this.labelTime7.Size = new System.Drawing.Size(0, 13);
+            this.labelTime7.TabIndex = 17;
+            // 
+            // labelTime6
+            // 
+            this.labelTime6.AutoSize = true;
+            this.labelTime6.Location = new System.Drawing.Point(6, 98);
+            this.labelTime6.Name = "labelTime6";
+            this.labelTime6.Size = new System.Drawing.Size(0, 13);
+            this.labelTime6.TabIndex = 16;
+            // 
+            // labelTime5
+            // 
+            this.labelTime5.AutoSize = true;
+            this.labelTime5.Location = new System.Drawing.Point(6, 85);
+            this.labelTime5.Name = "labelTime5";
+            this.labelTime5.Size = new System.Drawing.Size(0, 13);
+            this.labelTime5.TabIndex = 15;
+            // 
+            // labelTime4
+            // 
+            this.labelTime4.AutoSize = true;
+            this.labelTime4.Location = new System.Drawing.Point(6, 72);
+            this.labelTime4.Name = "labelTime4";
+            this.labelTime4.Size = new System.Drawing.Size(0, 13);
+            this.labelTime4.TabIndex = 14;
+            // 
+            // labelTime3
+            // 
+            this.labelTime3.AutoSize = true;
+            this.labelTime3.Location = new System.Drawing.Point(6, 59);
+            this.labelTime3.Name = "labelTime3";
+            this.labelTime3.Size = new System.Drawing.Size(0, 13);
+            this.labelTime3.TabIndex = 13;
+            // 
+            // labelTime2
+            // 
+            this.labelTime2.AutoSize = true;
+            this.labelTime2.Location = new System.Drawing.Point(6, 46);
+            this.labelTime2.Name = "labelTime2";
+            this.labelTime2.Size = new System.Drawing.Size(0, 13);
+            this.labelTime2.TabIndex = 12;
+            // 
+            // labelTime1
+            // 
+            this.labelTime1.AutoSize = true;
+            this.labelTime1.Location = new System.Drawing.Point(6, 33);
+            this.labelTime1.Name = "labelTime1";
+            this.labelTime1.Size = new System.Drawing.Size(0, 13);
+            this.labelTime1.TabIndex = 11;
             // 
             // labelTime0
             // 
@@ -322,99 +423,64 @@
             this.textBoxCustom.Enabled = false;
             this.textBoxCustom.Location = new System.Drawing.Point(240, 295);
             this.textBoxCustom.Name = "textBoxCustom";
-            this.textBoxCustom.Size = new System.Drawing.Size(156, 20);
-            this.textBoxCustom.TabIndex = 4;
+            this.textBoxCustom.Size = new System.Drawing.Size(153, 20);
+            this.textBoxCustom.TabIndex = 6;
             this.textBoxCustom.Text = "www.google.com";
             this.textBoxCustom.TextChanged += new System.EventHandler(this.textBoxCustom_TextChanged);
             // 
-            // labelTime1
+            // labelDelay
             // 
-            this.labelTime1.AutoSize = true;
-            this.labelTime1.Location = new System.Drawing.Point(6, 33);
-            this.labelTime1.Name = "labelTime1";
-            this.labelTime1.Size = new System.Drawing.Size(0, 13);
-            this.labelTime1.TabIndex = 11;
+            this.labelDelay.AutoSize = true;
+            this.labelDelay.Location = new System.Drawing.Point(246, 48);
+            this.labelDelay.Name = "labelDelay";
+            this.labelDelay.Size = new System.Drawing.Size(88, 13);
+            this.labelDelay.TabIndex = 3;
+            this.labelDelay.Text = "Delay (Seconds):";
             // 
-            // labelTime2
+            // numericUpDownDelay
             // 
-            this.labelTime2.AutoSize = true;
-            this.labelTime2.Location = new System.Drawing.Point(6, 46);
-            this.labelTime2.Name = "labelTime2";
-            this.labelTime2.Size = new System.Drawing.Size(0, 13);
-            this.labelTime2.TabIndex = 12;
+            this.numericUpDownDelay.DecimalPlaces = 3;
+            this.numericUpDownDelay.Location = new System.Drawing.Point(340, 46);
+            this.numericUpDownDelay.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.numericUpDownDelay.Name = "numericUpDownDelay";
+            this.numericUpDownDelay.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.numericUpDownDelay.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDownDelay.TabIndex = 4;
+            this.numericUpDownDelay.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDelay.ValueChanged += new System.EventHandler(this.numericUpDownDelay_ValueChanged);
             // 
-            // labelTime3
+            // chartPing
             // 
-            this.labelTime3.AutoSize = true;
-            this.labelTime3.Location = new System.Drawing.Point(6, 59);
-            this.labelTime3.Name = "labelTime3";
-            this.labelTime3.Size = new System.Drawing.Size(0, 13);
-            this.labelTime3.TabIndex = 13;
-            // 
-            // labelTime4
-            // 
-            this.labelTime4.AutoSize = true;
-            this.labelTime4.Location = new System.Drawing.Point(6, 72);
-            this.labelTime4.Name = "labelTime4";
-            this.labelTime4.Size = new System.Drawing.Size(0, 13);
-            this.labelTime4.TabIndex = 14;
-            // 
-            // labelTime5
-            // 
-            this.labelTime5.AutoSize = true;
-            this.labelTime5.Location = new System.Drawing.Point(6, 85);
-            this.labelTime5.Name = "labelTime5";
-            this.labelTime5.Size = new System.Drawing.Size(0, 13);
-            this.labelTime5.TabIndex = 15;
-            // 
-            // labelTime6
-            // 
-            this.labelTime6.AutoSize = true;
-            this.labelTime6.Location = new System.Drawing.Point(6, 98);
-            this.labelTime6.Name = "labelTime6";
-            this.labelTime6.Size = new System.Drawing.Size(0, 13);
-            this.labelTime6.TabIndex = 16;
-            // 
-            // labelTime7
-            // 
-            this.labelTime7.AutoSize = true;
-            this.labelTime7.Location = new System.Drawing.Point(6, 111);
-            this.labelTime7.Name = "labelTime7";
-            this.labelTime7.Size = new System.Drawing.Size(0, 13);
-            this.labelTime7.TabIndex = 17;
-            // 
-            // labelTime8
-            // 
-            this.labelTime8.AutoSize = true;
-            this.labelTime8.Location = new System.Drawing.Point(6, 124);
-            this.labelTime8.Name = "labelTime8";
-            this.labelTime8.Size = new System.Drawing.Size(0, 13);
-            this.labelTime8.TabIndex = 18;
-            // 
-            // labelTime9
-            // 
-            this.labelTime9.AutoSize = true;
-            this.labelTime9.Location = new System.Drawing.Point(6, 137);
-            this.labelTime9.Name = "labelTime9";
-            this.labelTime9.Size = new System.Drawing.Size(0, 13);
-            this.labelTime9.TabIndex = 19;
-            // 
-            // radioButtonOCE
-            // 
-            this.radioButtonOCE.AutoSize = true;
-            this.radioButtonOCE.Location = new System.Drawing.Point(7, 68);
-            this.radioButtonOCE.Name = "radioButtonOCE";
-            this.radioButtonOCE.Size = new System.Drawing.Size(65, 17);
-            this.radioButtonOCE.TabIndex = 3;
-            this.radioButtonOCE.TabStop = true;
-            this.radioButtonOCE.Text = "Oceania";
-            this.radioButtonOCE.UseVisualStyleBackColor = true;
-            this.radioButtonOCE.CheckedChanged += new System.EventHandler(this.radioButtonOCE_CheckedChanged);
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
+            chartArea1.AxisX.Maximum = 10D;
+            chartArea1.AxisX.Minimum = 1D;
+            chartArea1.AxisY.Interval = 20D;
+            chartArea1.AxisY.Maximum = 300D;
+            chartArea1.AxisY.Minimum = 0D;
+            chartArea1.Name = "ChartArea1";
+            this.chartPing.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartPing.Legends.Add(legend1);
+            this.chartPing.Location = new System.Drawing.Point(-1, 322);
+            this.chartPing.Name = "chartPing";
+            series1.BorderWidth = 3;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Color = System.Drawing.Color.DarkBlue;
+            series1.Legend = "Legend1";
+            series1.Name = "Ping";
+            series1.YValuesPerPoint = 6;
+            this.chartPing.Series.Add(series1);
+            this.chartPing.Size = new System.Drawing.Size(411, 214);
+            this.chartPing.TabIndex = 13;
+            this.chartPing.Text = "Ping Chart";
             // 
             // LeaguePing
             // 
@@ -423,7 +489,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.buttonStop;
-            this.ClientSize = new System.Drawing.Size(408, 327);
+            this.ClientSize = new System.Drawing.Size(408, 532);
+            this.Controls.Add(this.buttonConnection);
+            this.Controls.Add(this.chartPing);
+            this.Controls.Add(this.numericUpDownDelay);
+            this.Controls.Add(this.labelDelay);
             this.Controls.Add(this.textBoxCustom);
             this.Controls.Add(this.pictureBoxPing);
             this.Controls.Add(this.buttonReset);
@@ -447,6 +517,8 @@
             this.groupBoxPingHistory.ResumeLayout(false);
             this.groupBoxPingHistory.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPing)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -489,7 +561,10 @@
         private System.Windows.Forms.Label labelTime2;
         private System.Windows.Forms.Label labelTime1;
         private System.Windows.Forms.RadioButton radioButtonOCE;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Label labelDelay;
+        private System.Windows.Forms.NumericUpDown numericUpDownDelay;
+        private System.Windows.Forms.Button buttonConnection;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPing;
     }
 }
 
